@@ -1,0 +1,401 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:views="clr-namespace:GermanDictionary.Views"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                    xmlns:con="clr-namespace:GermanDictionary.Views.Converters">  
+    
+    <!-- Converters -->
+    <con:FontSizeToHeightConverter x:Key="fontToHeight" />   
+
+    <!-- Font sizes -->
+    <sys:Double x:Key="defaultFont">15</sys:Double>
+    <sys:Double x:Key="buttonFont">18</sys:Double>  
+    <sys:Double x:Key="smallFont">20</sys:Double>
+    <sys:Double x:Key="largeFont">25</sys:Double>
+    
+    <!-- Height converter parameter -->
+    <!-- Used for limiting the height of a control based on its font size -->
+    <sys:Double x:Key="fontToHeightRatio">1.35</sys:Double>
+    
+    
+    
+	<!-- Base Button Style -->
+	<Style x:Key="baseButton" TargetType="Button">
+        <Setter Property="FontSize" Value="{StaticResource buttonFont}" />
+        <Setter Property="Padding" Value="5" />
+        <Setter Property="Margin" Value="10,0,10,0" />
+    </Style>
+    
+    <!-- Umlaut Button style -->
+    <Style x:Key="umlautButton" TargetType="Button" BasedOn="{StaticResource baseButton}">
+        <Setter Property="Width"  Value="30" />
+        <Setter Property="Padding" Value="Auto" />
+        <Setter Property="Margin" Value="0,0,5,0" />
+        <Setter Property="views:AttachedProperties.TextBoxContentReceiver" Value="{Binding ElementName=insertBox}" />
+        
+        <!-- To upper or lower case content changing -->
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding ElementName=caseChanger, Path=IsChecked}" Value="true">
+                <Setter Property="views:AttachedProperties.ExclusiveCase" Value="OnlyUpper" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    
+    <!-- Insert Button -->
+    <Style x:Key="insertButton" TargetType="Button" BasedOn="{StaticResource baseButton}">
+        <Setter Property="Content" Value="Insert" />
+        
+        <!-- Content change for Serbian language -->
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Language}" Value="Serbian">
+                <Setter Property="Content" Value="Ubaci" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    
+    <!-- Delete Button -->
+    <Style x:Key="deleteButton" TargetType="Button" BasedOn="{StaticResource baseButton}">
+        <Setter Property="Content" Value="Delete" />
+        
+        <!-- Content change for Serbian language -->
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Language}" Value="Serbian">
+                <Setter Property="Content" Value="Izbrisi" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    
+    
+    
+    <!-- TextBlock base style -->    
+    <Style x:Key="baseTextBlock" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{StaticResource defaultFont}" />
+    </Style>
+    
+    <!-- TextBlock above insert box -->
+    <Style x:Key="insertInfo" TargetType="TextBlock" BasedOn="{StaticResource baseTextBlock}">
+        <Setter Property="Text" Value="Field for searching and/or inserting new words" />
+        
+        <!-- Text change for Serbian language -->
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Language}" Value="Serbian">
+                <Setter Property="Text" Value="Polje za pretragu i/ili unos novih reci" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    
+    <!-- TextBlock next to filter ComboBox -->
+    <Style x:Key="filterInfo" TargetType="TextBlock" BasedOn="{StaticResource baseTextBlock}">
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Margin" Value="0,0,10,0" />
+        <Setter Property="Text" Value="Show:" />
+        
+        <!-- Text change for Serbian language -->
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Language}" Value="Serbian">
+                <Setter Property="Text" Value="Prikazi:" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    
+    <!-- CheckBox below insert box -->
+    <Style x:Key="searchInfo" TargetType="CheckBox">
+        <Setter Property="FontSize" Value="{StaticResource defaultFont}" />
+        <Setter Property="Margin" Value="0,5,0,0" />
+        <Setter Property="Content" Value="Search by translation" />
+
+        <!-- Content change for Serbian language -->
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Language}" Value="Serbian">
+                <Setter Property="Content" Value="Pretraga na osnovu prevoda" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    
+    
+    
+    <!-- Base GroupBox -->
+    <Style x:Key="baseGroupBox" TargetType="GroupBox">
+        <Setter Property="FontSize" Value="{StaticResource defaultFont}" />        
+        <Setter Property="BorderThickness" Value="2" />
+    </Style>
+    
+    <!-- GroupBox holding selected word and translation style -->
+    <Style x:Key="selectedGroup" TargetType="GroupBox" BasedOn="{StaticResource baseGroupBox}">
+        <Setter Property="Padding" Value="20" />
+        <Setter Property="Header" Value="Selected word and translation" />
+        
+        <!-- Header change for Serbian language -->
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Language}" Value="Serbian">
+                <Setter Property="Header" Value="Selektovana rec i prevod" />
+            </DataTrigger>            
+        </Style.Triggers>
+    </Style>
+    
+    <!-- GroupBox for insert word suggestions -->
+    <Style x:Key="suggestionsGroup" TargetType="GroupBox" BasedOn="{StaticResource baseGroupBox}">
+        <Setter Property="Margin" Value="0,15,0,0" />
+        <Setter Property="Header" Value="Suggestions on how to format nouns and verbs" />
+        
+        <!-- Header changes for Serbian language -->
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Language}" Value="Serbian">
+                <Setter Property="Header" Value="Sugestije za nacin pisanja imenica i glagola" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    
+    
+    
+    <!-- TextBox base style -->
+    <Style x:Key="baseTextBox" TargetType="TextBox">
+        <Setter Property="FontSize" Value="{StaticResource largeFont}" />  
+    </Style>
+    
+    <!-- Selected word TextBox style-->
+    <Style x:Key="selectedWord" TargetType="TextBox" BasedOn="{StaticResource baseTextBox}">
+        <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="IsReadOnly" Value="True" />
+        <Setter Property="Margin" Value="0,0,50,0" />        
+        <Setter Property="ToolTip" Value="You cannot change the inserted word, just its translation."/>
+        
+        <Style.Triggers>
+            <!-- ToolTip change for Serbian language -->
+            <DataTrigger Binding="{Binding Language}" Value="Serbian">
+                <Setter Property="ToolTip" Value="Ne mozete izmeniti unetu rec, samo prevod." />
+            </DataTrigger>            
+            
+            <!-- On disabled set background to grayish -->
+            <Trigger Property="IsEnabled" Value="True">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <SolidColorBrush Color="#FFD0D0D0" />                
+                    </Setter.Value>
+                </Setter>                
+            </Trigger>
+        </Style.Triggers>        
+    </Style>
+    
+    <!-- Selected translation TextBox style -->
+    <Style x:Key="selectedTranslation" TargetType="TextBox">
+        <Setter Property="FontSize" Value="{StaticResource smallFont}" />
+        <Setter Property="MinHeight" Value="200" />
+        <Setter Property="MaxHeight" Value="400" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="AcceptsReturn" Value="True" />
+        <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+        <Setter Property="Margin" Value="45,5,0,0" />
+    </Style>    
+    
+    
+    
+    <!-- ListBox translation TextBox style -->
+    <Style x:Key="listBoxTranslation" TargetType="TextBox">
+        <Setter Property="FontSize" Value="{StaticResource smallFont}" />
+        <Setter Property="IsEnabled" Value="False" />
+        <Setter Property="Width" Value="250" />
+        
+        <!-- Limits the height of all items in the list box as this is the only control that can be in more than 1 line -->
+        <Setter Property="MaxHeight" Value="{Binding RelativeSource={RelativeSource Self}, 
+            Path=FontSize, Converter={StaticResource fontToHeight}, ConverterParameter={StaticResource fontToHeightRatio}}" />               
+        
+        <!-- On IsEnabled==False TextBlock style -->
+        <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="TextBox">
+                            <Border>
+                                <TextBlock Text="{TemplateBinding Text}" TextTrimming="WordEllipsis" Foreground="Navy"  />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
+    </Style>   
+    
+    
+    
+    <!-- Filter ComboBox style -->
+    <Style x:Key="filter" TargetType="ComboBox">
+        <Setter Property="SelectedIndex" Value="0" />
+        <Setter Property="Width" Value="Auto" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="FontSize" Value="{StaticResource smallFont}" />
+        <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=SelectedValue.ToolTip}" />      
+    </Style>
+    
+    <!-- Base ComboBoxItem style -->
+    <Style x:Key="baseComboBoxItem" TargetType="ComboBoxItem">
+        <Setter Property="FontSize" Value="{StaticResource defaultFont}" />
+    </Style>
+    
+    <!-- All words ComboBoxItem -->
+    <Style x:Key="allWordsFilter" TargetType="ComboBoxItem" BasedOn="{StaticResource baseComboBoxItem}">
+        <Setter Property="Content" Value="All words" />
+        
+        <!-- Content change for Serbian language -->
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Language}" Value="Serbian">
+                <Setter Property="Content" Value="Sve reci" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- Nouns ComboBoxItem -->
+    <Style x:Key="nounsFilter" TargetType="ComboBoxItem" BasedOn="{StaticResource baseComboBoxItem}">
+        <Setter Property="Content" Value="Nouns" />
+
+        <!-- Content change for Serbian language -->
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Language}" Value="Serbian">
+                <Setter Property="Content" Value="Imenice" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- Verbs ComboBoxItem -->
+    <Style x:Key="verbsFilter" TargetType="ComboBoxItem" BasedOn="{StaticResource baseComboBoxItem}">
+        <Setter Property="Content" Value="Verbs" />
+        <Setter Property="ToolTip" Value="Shows only verbs that start with sich and/or end with -en" />
+
+        <!-- Changes for Serbian language -->
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Language}" Value="Serbian">
+                <Setter Property="Content" Value="Glagoli" />
+                <Setter Property="ToolTip" Value="Prikazuje samo glagole koji pocinju sa sich i/ili se zavrsavaju na -en" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- All but nouns and verbs ComboBoxItem -->
+    <Style x:Key="allButFilter" TargetType="ComboBoxItem" BasedOn="{StaticResource baseComboBoxItem}">
+        <Setter Property="Content" Value="All words except nouns and verbs" />
+
+        <!-- Content change for Serbian language -->
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Language}" Value="Serbian">
+                <Setter Property="Content" Value="Sve reci osim imenica i glagola" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    
+    
+    
+    <!-- Default ToolTip font size --> 
+    <Style TargetType="ToolTip">
+        <Setter Property="FontSize" Value="{StaticResource defaultFont}" />
+    </Style>
+
+
+
+    <!--        MenuView styles        -->
+    
+    <!-- Menu style -->
+    <Style x:Key="menu" TargetType="Menu">
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="Height" Value="26" />
+        <Setter Property="Background" Value="#FFF0F0F0" />
+    </Style>
+    
+    <!-- Default MenuItem font size --> 
+    <Style TargetType="MenuItem">
+        <Setter Property="FontSize" Value="{StaticResource defaultFont}" />
+    </Style>
+    
+    
+    <!-- Options/Autosave MenuItem -->
+    <Style x:Key="optionsAutosave" TargetType="MenuItem">
+        <Setter Property="Header" Value="Autosave options" />
+        
+        <!-- Header change for Serbian language -->
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Language}" Value="Serbian">
+                <Setter Property="Header" Value="Automatsko snimanje recnika" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    
+    <!-- Options/Autosave/MenuItem MenuItem -->
+    <Style x:Key="optionsAutosaveMenuItem" TargetType="MenuItem">
+        <Setter Property="StaysOpenOnClick" Value="True" />
+        <Setter Property="ToolTip" Value="Set to 0 minutes if you do not want the option of autosaving your dictionary." />
+        
+        <!-- TooTip change for Serbian language -->
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Language}" Value="Serbian">
+                <Setter Property="ToolTip" Value="Stavite 0 minuta ukoliko ne zelite opciju automatskog snimanja recnika." />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    
+    <!-- Options/Autosave/MenuItem.Header TextBlock -->
+    <Style x:Key="optionsAutosaveTextBlock" TargetType="TextBlock">
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Margin" Value="0,0,5,0" />
+        <Setter Property="Text" Value="Save dictionary every: " />
+        
+        <!-- Text change for Serbian language -->
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Language}" Value="Serbian">
+                <Setter Property="Text" Value="Snimi na svakih: " />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    
+    
+    <!-- Options/Language selection MenuItem -->
+    <Style x:Key="optionsLanguage" TargetType="MenuItem">
+        <Setter Property="Header" Value="Choose a language"/>
+        
+        <!-- Header change for Serbian language -->
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Language}" Value="Serbian">
+                <Setter Property="Header" Value="Izaberi jezik" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    
+    <!-- Options/Language selection/Serbian RadioButton -->
+    <Style x:Key="optionsLanguageSerbian" TargetType="RadioButton">
+        <Setter Property="Content" Value="Serbian               " />
+
+        <!-- Content change for Serbian language -->
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Language}" Value="Serbian">
+                <Setter Property="Content" Value="Srpski                " />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    
+    <!-- Options/Language selection/English RadioButton -->
+    <Style x:Key="optionsLanguageEnglish" TargetType="RadioButton">
+        <Setter Property="Content" Value="English               " />
+        
+        <!-- Content change for Serbian langauge -->
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Language}" Value="Serbian">
+                <Setter Property="Content" Value="Engleski              " />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    
+        
+    <!-- Options/Automatic load on startup MenuItem -->
+    <Style x:Key="optionsAutoLoad" TargetType="MenuItem">
+        <Setter Property="IsCheckable" Value="True" />
+        <Setter Property="StaysOpenOnClick" Value="True" />
+        <Setter Property="Header" Value="Always load last used dictionary on startup" />
+        
+        <!-- Header change on Serbian language -->
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Language}" Value="Serbian">
+                <Setter Property="Header" Value="Uvek ucitaj poslednji koriscen recnik" />
+                <Setter Property="ToolTip" Value="Prilikom pokretanja aplikacije ucitava poslednji koriscen recnik." />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    
+</ResourceDictionary>

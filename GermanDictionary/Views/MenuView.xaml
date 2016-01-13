@@ -1,0 +1,84 @@
+﻿<UserControl x:Class="GermanDictionary.Views.MenuView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"   
+             xmlns:con="clr-namespace:GermanDictionary.Views.Converters"
+             xmlns:views="clr-namespace:GermanDictionary.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <!-- Converters -->
+        <con:TimeSpanToStringConverter x:Key="timeSpanToString" />
+        <con:LanguageToBoolConverter x:Key="languageToBool" />
+        
+        <!-- Language to bool converter parameters -->
+        <sys:String x:Key="serbianParameter">Serbian</sys:String>
+        <sys:String x:Key="englishParameter">English</sys:String>
+    </UserControl.Resources>
+
+    <Menu Style="{StaticResource menu}" >       
+
+        <!-- File -->
+        <MenuItem Header="File">
+            <MenuItem Header="New" Command="{Binding NewDictionaryCommand}" />
+            <Separator />
+            <MenuItem Header="Open" Command="{Binding OpenDictionaryCommand}" />
+            <Separator />
+            <MenuItem Header="Save" Command="{Binding SaveDictionaryCommand}">
+                <MenuItem.CommandParameter>
+                    <sys:Boolean>False</sys:Boolean>
+                </MenuItem.CommandParameter>
+            </MenuItem>
+            <MenuItem Header="Save As" Command="{Binding SaveDictionaryCommand}">
+                <MenuItem.CommandParameter>
+                    <sys:Boolean>True</sys:Boolean>
+                </MenuItem.CommandParameter>
+            </MenuItem>
+            <Separator />
+            <MenuItem Header="Create Word document" Command="{Binding CreateDocxCommand}" />
+            <Separator />
+            <MenuItem Header="Close" Command="{Binding CloseCommand}"
+                      CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
+        </MenuItem>
+
+        <!-- Options -->
+        <MenuItem Header="Options">
+            <!-- Automatic save -->
+            <MenuItem Style="{StaticResource optionsAutosave}" >
+                <MenuItem Style="{StaticResource optionsAutosaveMenuItem}">
+                    <MenuItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Style="{StaticResource optionsAutosaveTextBlock}" />
+                            <TextBox Width="30" MaxLength="2" FontSize="{StaticResource defaultFont}" 
+                                     Text="{Binding Interval, Mode=TwoWay, Converter={StaticResource timeSpanToString}}"  
+                                     views:AttachedProperties.LimitTextRegex="^[0-9]+$" />
+                            <TextBlock Text="  min" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </MenuItem.Header>
+                </MenuItem>
+            </MenuItem>  
+            
+            <!-- Language selection -->
+            <MenuItem Style="{StaticResource optionsLanguage}">
+                <RadioButton Style="{StaticResource optionsLanguageSerbian}"
+                             IsChecked="{Binding Language, Converter={StaticResource languageToBool}, 
+                    ConverterParameter={StaticResource serbianParameter}, Mode=TwoWay}" 
+                             Command="{Binding ChangeLanguageCommand}" CommandParameter="Serbian"/>
+                <RadioButton Style="{StaticResource optionsLanguageEnglish}"
+                             IsChecked="{Binding Language, Converter={StaticResource languageToBool}, 
+                    ConverterParameter={StaticResource englishParameter}, Mode=TwoWay}" 
+                             Command="{Binding ChangeLanguageCommand}" CommandParameter="English" />
+            </MenuItem>  
+            
+            <Separator />   
+            
+            <!-- Automatic dictionary load on startup -->
+            <MenuItem Style="{StaticResource optionsAutoLoad}" IsChecked="{Binding OpenDictionaryAutomatically, Mode=TwoWay}" />
+        </MenuItem>
+
+        <!-- Help -->
+        <MenuItem Header="Help" ToolTip="Es ist nichts hier jetzt."/>
+    </Menu>
+</UserControl>
