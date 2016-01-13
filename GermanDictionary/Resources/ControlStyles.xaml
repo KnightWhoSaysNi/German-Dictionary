@@ -44,6 +44,7 @@
     <!-- Insert Button -->
     <Style x:Key="insertButton" TargetType="Button" BasedOn="{StaticResource baseButton}">
         <Setter Property="Content" Value="Insert" />
+        <Setter Property="MaxWidth" Value="400" />
         
         <!-- Content change for Serbian language -->
         <Style.Triggers>
@@ -56,6 +57,7 @@
     <!-- Delete Button -->
     <Style x:Key="deleteButton" TargetType="Button" BasedOn="{StaticResource baseButton}">
         <Setter Property="Content" Value="Delete" />
+        <Setter Property="MaxWidth" Value="400" />
         
         <!-- Content change for Serbian language -->
         <Style.Triggers>
