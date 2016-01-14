@@ -165,7 +165,7 @@ namespace GermanDictionary.ViewModels
             notifications.Add("UpdateSavedSettings", new List<string>());
             notifications["UpdateSavedSettings"].Add("\r\nIMPORTANT! Do not change the contents of this file." +
                 "\r\nIf this file is deleted or changed, on the next application startup, the last saved " +
-                "dictionary may not be automatically opened and the user preferences may have to be set again");
+                "dictionary may not be automatically opened and user preferences may have to be set again");
             notifications["UpdateSavedSettings"].Add("\r\nVAZNO! Ne menjajte sadrzaj ovog fajla.\r\n" + 
                 "Ukoliko se ovaj fajl izbrise ili izmeni, pri sledecem pokretanju aplikacije, poslednji " +
                 "koriscen recnik mozda nece biti automatski ucitan i mozda cete morati ponovo da podesite " +
