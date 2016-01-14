@@ -353,6 +353,17 @@ namespace GermanDictionary.ViewModels
                 return isCorrectWordType && IsCorrectWord(pairToBeChecked);
             }
         }
+        
+        static Regex verbsRegex = 
+            new Regex(@"^(?:sich )?\w+en\b", RegexOptions.IgnoreCase); // Optional start with "sich " and a word ending with "en"
+        static Regex allButRegex = 
+            new Regex(@"(?x) ^ (?! (?:          # Using negative lookahead, word cannot start with:
+                        (?: sich \ \w)          # sich, empty space and then a word character
+                        |                       # or
+                        (?: d(er|ie|as) \ \w)   # der, die or das, empty space and then a word character
+                        |                       # or
+                        (?: \w+ en \b)          # a word ending with en              
+                        ))", RegexOptions.IgnoreCase); // non-capturing groups used for better performance                                                  
 
         /// <summary>
         /// Checks if the word is correct type based on chosen Filter.
@@ -361,28 +372,22 @@ namespace GermanDictionary.ViewModels
         {
             string word = pairToBeChecked.Word;
             string pattern = string.Empty;
+            bool isCorrectWordType = true;
             
             switch (Filter)
             {
                 case WordType.Nouns: // Only nouns are visible
                     return pairToBeChecked.WordIsANoun;                    
-                case WordType.Verbs:
-                    pattern = @"^(?:sich )?\w+en\b"; // Optional start with "sich " and a word ending with "en"
+                case WordType.Verbs:                    
+                    isCorrectWordType = verbsRegex.IsMatch(word);
                     break;
                 case WordType.AllButNounsAndVerbs:
-                    pattern = @"(?x) ^ (?! (?:      # Using negative lookahead, word cannot start with:
-                            (?: sich \ \w)          # sich, empty space and then a word character
-                            |                       # or
-                            (?: d(er|ie|as) \ \w)   # der, die or das, empty space and then a word character
-                            |                       # or
-                            (?: \w+ en \b)          # a word ending with en              
-                            ))";                    // non-capturing groups used for better performance
+                    isCorrectWordType = allButRegex.IsMatch(word);
                     break;
                 default: 
                     break; // WordType.All selected so no extra filtering
             }
-
-            bool isCorrectWordType = Regex.IsMatch(word, pattern, RegexOptions.IgnoreCase);
+                        
             return isCorrectWordType;
         }
 
@@ -860,6 +865,8 @@ namespace GermanDictionary.ViewModels
             CreateDocument(filePath);
         }
 
+        static Regex documentRegex = new Regex(@"\t|\r|\n");
+
         /// <summary>
         /// Creates a WordprocessingDocument.
         /// </summary>
@@ -881,7 +888,8 @@ namespace GermanDictionary.ViewModels
                         var pair = Dictionary[i];
                         string word = pair.Word.TrimEnd(new char[] { ' ', '/', '(' }); // word can't end with these characters
                         string translation = pair.Translation.TrimEnd();
-                        translation = Regex.Replace(translation, @"\t|\r|\n", " "); // everything on a single line
+                        //translation = Regex.Replace(translation, @"\t|\r|\n", " "); // everything on a single line
+                        translation = documentRegex.Replace(translation, " "); // everything on a single line
                         translation = "  =  " + translation;
                         
                         CreateFirstLetterRun(paragraph, pair, i);                        
