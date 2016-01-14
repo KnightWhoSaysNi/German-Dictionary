@@ -188,6 +188,7 @@
         <Setter Property="AcceptsReturn" Value="True" />
         <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
         <Setter Property="Margin" Value="45,5,0,0" />
+        <Setter Property="AcceptsTab" Value="True" />
     </Style>    
     
     
