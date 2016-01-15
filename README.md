@@ -5,4 +5,4 @@ This application lets users create their own custom dictionaries. German words a
 This app was initially requested by a person with very limited knowledge of English, hence the need for an additional language. But it can be used by anyone learning German, who prefers typing, rather than writing, or just needs a faster way to find a word in his/her own dictionary; and there's the option of automatically making a formatted word document, ready for printing.
   
   
-Enclosed is a sample dictionary with some random words.  
+Enclosed is a sample dictionary with a few dozen words.  
