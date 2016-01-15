@@ -141,6 +141,8 @@ namespace GermanDictionary.Models
             return string.Format("{0} = {1}", Word, translation);
         }
 
+        static Regex nounRegex = new Regex(@"^d(er|ie|as) \w", RegexOptions.IgnoreCase);
+
         /// <summary>
         /// Checks whether the word begins with der, die or das, then an empty space 
         /// and a word character, i.e. if it's a german noun.
@@ -149,7 +151,7 @@ namespace GermanDictionary.Models
         /// <returns>True if it's a noun, false otherwise.</returns>
         private bool IsNoun(string word)
         {
-            bool isNoun = Regex.IsMatch(word, @"^d(er|ie|as) \w", RegexOptions.IgnoreCase);
+            bool isNoun = nounRegex.IsMatch(word);
             return isNoun;
         }
     }
